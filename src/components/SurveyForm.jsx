@@ -113,7 +113,7 @@ const SurveyForm = () => {
   };
 
   return (
-    <div className="w-screen  flex items-center justify-center bg-blue-200 py-4 ">
+    <div className="w-screen  flex items-center justify-center bg-blue-200 py-4 text-black">
       <ToastContainer position="top-center" autoClose={5000} />
 
       <form onSubmit={handleSubmit} className="bg-white h-fit px-4 py-4 rounded-lg shadow-md w-full max-w-md overflow-y-auto">
