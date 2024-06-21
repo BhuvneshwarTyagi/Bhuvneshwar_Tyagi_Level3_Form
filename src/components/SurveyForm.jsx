@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import useFormValidation from './useFormValidation';
 import fetchAdditionalQuestions from './fetchAdditionalQuestions';
-
+import LoadingComp from './Loading';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const SurveyForm = () => {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -55,7 +57,15 @@ const SurveyForm = () => {
   };
 
   const { errors, validateForm } = useFormValidation(formData, validate);
+  const [Loading, setLoading] = useState(false);
+  const [selectedOption, setSelectedOption] = useState({});
 
+  const handleOptionChange = (question, ans) => {
+    setSelectedOption(prevSelectedOption => ({
+      ...prevSelectedOption,
+      [question]: ans
+    }));
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -65,23 +75,49 @@ const SurveyForm = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      const additionalQuestions = await fetchAdditionalQuestions(formData.surveyTopic);
-      setFormData({
-        ...formData,
-        additionalQuestions,
-      });
-      alert(JSON.stringify({ ...formData, additionalQuestions }, null, 2));
+    if (!Loading) {
+      setLoading(true);
+      e.preventDefault();
+      if (validateForm() && formData.additionalQuestions.length<1) {
+        const additionalQuestions = await fetchAdditionalQuestions(formData.surveyTopic);
+        setFormData({
+          ...formData,
+          additionalQuestions,
+        });
+        
+      } else {
+        if(validateForm()){
+          alert(JSON.stringify({ ...formData }, null, 2));
+          setFormData({
+            fullName: '',
+            email: '',
+            surveyTopic: '',
+            favoriteProgrammingLanguage: '',
+            yearsOfExperience: '',
+            exerciseFrequency: '',
+            dietPreference: '',
+            highestQualification: '',
+            fieldOfStudy: '',
+            feedback: '',
+            additionalQuestions: [],
+          });
+          toast.success("Form successfully submitted");
+        }else{
+          toast.error('Please fill all the fields');
+        }
+        
+      }
+      
+      setLoading(false);
     }
   };
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center bg-blue-200 overflow-y-auto pt-16">
-        
-      
-      <form onSubmit={handleSubmit} className="bg-white h-auto px-4 py-2 rounded-lg shadow-md w-full max-w-md overflow-y-auto">
-      <h1 className='mb-3 text-center'>Survey</h1>
+    <div className="w-screen  flex items-center justify-center bg-blue-200 py-4 ">
+      <ToastContainer position="top-center" autoClose={5000} />
+
+      <form onSubmit={handleSubmit} className="bg-white h-fit px-4 py-4 rounded-lg shadow-md w-full max-w-md overflow-y-auto">
+        <h1 className='mb-3 text-center'>Survey</h1>
         <div className="mb-4">
           <label className="block mb-2">Full Name:</label>
           <input
@@ -217,22 +253,31 @@ const SurveyForm = () => {
             <h3 className="mb-2">Additional Questions</h3>
             {formData.additionalQuestions.map((question, index) => (
               <div key={index} className="mb-4">
-                <label className="block mb-2">{question.questionText}</label>
-                <input
-                  type="text"
-                  name={`additionalQuestion${index}`}
-                  value={formData[`additionalQuestion${index}`] || ''}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded-lg"
-                />
+                <label className="block mb-2">{question.question}</label>
+                {
+                  question.option.map((opt, index1) => (
+                    <div>
+                      <label>
+                        <input
+                          type="radio"
+                          name={`option-${index}`}
+                          value={opt}
+                          checked={selectedOption[question.question] === opt}
+                          onChange={()=>handleOptionChange(question.question,opt)}
+                        />
+                        {opt}
+                      </label>
+                    </div>
+                  ))
+                }
               </div>
             ))}
           </div>
         )}
 
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-lg">Submit</button>
+        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-lg">{Loading ? <LoadingComp /> : "Submit"}</button>
       </form>
-      
+
     </div>
   );
 };
