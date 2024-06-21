@@ -125,7 +125,7 @@ const SurveyForm = () => {
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
-            className="w-full p-2 border rounded-lg"
+            className="w-full p-2 border rounded-lg bg-white"
           />
           {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
         </div>
@@ -137,7 +137,7 @@ const SurveyForm = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-2 border rounded-lg"
+            className="w-full p-2 border rounded-lg bg-white"
           />
           {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
         </div>
@@ -174,7 +174,7 @@ const SurveyForm = () => {
                 name="yearsOfExperience"
                 value={formData.yearsOfExperience}
                 onChange={handleChange}
-                className="w-full p-2 border rounded-lg"
+                className="w-full p-2 border rounded-lg bg-white"
               />
               {errors.yearsOfExperience && <p className="text-red-500 text-sm">{errors.yearsOfExperience}</p>}
             </div>
@@ -242,7 +242,7 @@ const SurveyForm = () => {
             name="feedback"
             value={formData.feedback}
             onChange={handleChange}
-            className="w-full p-2 border rounded-lg"
+            className="w-full p-2 border rounded-lg bg-white"
             rows="4"
           />
           {errors.feedback && <p className="text-red-500 text-sm">{errors.feedback}</p>}
