@@ -144,7 +144,7 @@ const SurveyForm = () => {
 
         <div className="mb-4">
           <label className="block mb-2">Survey Topic:</label>
-          <select name="surveyTopic" value={formData.surveyTopic} onChange={handleChange} className="w-full p-2 border rounded-lg">
+          <select name="surveyTopic" value={formData.surveyTopic} onChange={handleChange} className="w-full p-2 border rounded-lg bg-white">
             <option value="">Select a topic</option>
             <option value="Technology">Technology</option>
             <option value="Health">Health</option>
